@@ -29,7 +29,12 @@ else
 fi
 
 echo "Running Vivado installer in Batch mode..."
-bash ${scriptdir}/vivado_install.sh ${scriptdir}/files/vivado_install_config.txt
+chmod +x ${VIVADO_INSTALLFILE}
+sudo bash ${scriptdir}/vivado_install.sh ${VIVADO_INSTALLFILE} ${scriptdir}/files/vivado_install_config.txt
+if [ $? != 0 ]; then
+  echo "Something went wrong during Vivado installation, exiting"
+  exit -1
+fi
 
 echo "Vivado Installation finished. Continuing installing oc-accel and Fletcher..."
 
