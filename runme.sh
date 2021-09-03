@@ -9,7 +9,7 @@ VERSION=2019.1
 VIVADO_INSTALLERNAME=Xilinx_Vivado_SDK_Web_2019.1_0524_1430_Lin64.bin
 VIVADO_INSTALLFILE=/home/opencapi/Downloads/${VIVADO_INSTALLERNAME}
 
-if [ -d /opt/Xilinx/${VERSION} ]; then
+if [ -d /opt/Xilinx/Vivado/${VERSION} ]; then
   echo "Vivado seems to be installed already, skipping..."
 else
   echo "Go to https://www.xilinx.com/member/forms/download/xef-vivado.html?filename=Xilinx_Vivado_SDK_Web_2019.1_0524_1430_Lin64.bin"
