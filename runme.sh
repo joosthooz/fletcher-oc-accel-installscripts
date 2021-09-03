@@ -26,18 +26,16 @@ else
     echo "Could not find the vivado installation file in the expected location (${VIVADO_INSTALLFILE}). Please try again."
     exit -1
   fi
+  echo "Running Vivado installer in Batch mode..."
+  chmod +x ${VIVADO_INSTALLFILE}
+  sudo bash ${scriptdir}/vivado_install.sh ${VIVADO_INSTALLFILE} ${scriptdir}/files/vivado_install_config.txt
+  if [ $? != 0 ]; then
+    echo "Something went wrong during Vivado installation, exiting"
+    exit -1
+  fi
+
+  echo "Vivado Installation finished. Continuing installing oc-accel and Fletcher..."
 fi
-
-echo "Running Vivado installer in Batch mode..."
-chmod +x ${VIVADO_INSTALLFILE}
-sudo bash ${scriptdir}/vivado_install.sh ${VIVADO_INSTALLFILE} ${scriptdir}/files/vivado_install_config.txt
-if [ $? != 0 ]; then
-  echo "Something went wrong during Vivado installation, exiting"
-  exit -1
-fi
-
-echo "Vivado Installation finished. Continuing installing oc-accel and Fletcher..."
-
 
 # Install Fletcher and fletchgen from binary release (RPM)
 #RUN cd ${WORKSPACE}/ \
