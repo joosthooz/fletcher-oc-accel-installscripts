@@ -73,7 +73,7 @@ else
   && cd ${WORKSPACE}/fletcher/build \
   && scl enable devtoolset-9 'bash -c "cmake -DFLETCHER_BUILD_FLETCHGEN=On .."' \
   && scl enable devtoolset-9 'bash -c "make -j4"' \
-  && sudo scl enable devtoolset-9 'bash -c "make -C ${WORKSPACE}/fletcher/build install"'
+  && sudo scl enable devtoolset-9 'bash -c "make install"'
   if [ $? != 0 ]; then
     echo "Something went wrong during Fletcher installation, exiting"
   exit -1
