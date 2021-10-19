@@ -7,7 +7,7 @@ yum -y install gcc gcc-c++ make java-1.8.0-openjdk libXrender-devel libXtst-deve
 yum -y install ncurses-devel xterm which gdb python3-pip python3-devel patch
 yum -y install centos-release-scl devtoolset-9
 pip3 install -U pip wheel 
-pip3 install numpy pyarrow vhdeps vhdmmio
+pip3 install numpy pyarrow vhdeps vhdmmio notebook
 
 # Install a recent CMake
 mkdir ${WORKSPACE}/cmake && cd ${WORKSPACE}/cmake \

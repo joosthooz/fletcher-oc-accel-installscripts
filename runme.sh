@@ -102,7 +102,7 @@ if [ -d ${WORKSPACE}/OpenCAPI/fletcher-oc-accel ]; then
 else
   cd ${WORKSPACE}/OpenCAPI \
   && git clone https://github.com/abs-tudelft/fletcher-oc-accel \
-  && pushd fletcher-oc-accel && git checkout merge_ocxl_updates && git submodule init && git submodule update && popd \
+  && pushd fletcher-oc-accel && git checkout realign && git submodule init && git submodule update && popd \
   && pushd fletcher-oc-accel/fletcher && git submodule init && git submodule update && popd
   if [ $? != 0 ]; then
     echo "Something went wrong during Fletcher-oc-accel installation, exiting"
@@ -110,17 +110,18 @@ else
   fi
 fi
 
-# Install config files for the Fletcher-oc-accel examples into oc-accel
-cp ${scriptdir}/files/customaction.defconfig ${WORKSPACE}/OpenCAPI/oc-accel/defconfig
-cp ${scriptdir}/files/snap_env.sh ${WORKSPACE}/OpenCAPI/oc-accel/
-
 echo "Installation completed. To run a Fletcher OpenCAPI example application, press enter. Otherwise, exit with ctrl-c."
 read
+
+# Install config files for the Fletcher-oc-accel examples into oc-accel
+cp ${scriptdir}/files/customaction.defconfig ${WORKSPACE}/OpenCAPI/oc-accel/defconfig
+cp ${scriptdir}/files/sum_snap_env.sh ${WORKSPACE}/OpenCAPI/oc-accel/snap_env.sh
+
 cd ${WORKSPACE}/OpenCAPI/oc-accel \
 && source /opt/Xilinx/Vivado/${VERSION}/settings64.sh \
 && make -s customaction.defconfig \
 && make model \
-&& ./ocaccel_workflow.py --no_configure --no_make_model -t "${WORKSPACE}/OpenCAPI/fletcher-oc-accel/examples/stringwrite/sw/snap_stringwrite"
+&& ./ocaccel_workflow.py --no_configure --no_make_model -t "${WORKSPACE}/OpenCAPI/fletcher-oc-accel/examples/sum/sw/run_ocxl_cosim_notebook.sh"
 
 
 
