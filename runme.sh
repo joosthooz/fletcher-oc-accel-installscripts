@@ -39,16 +39,16 @@ fi
 
 # Install Fletcher and fletchgen from binary release (RPM)
 #RUN cd ${WORKSPACE}/ \
-#    && wget https://github.com/abs-tudelft/fletcher/releases/download/0.0.19/fletcher-0.0.19-1.el7.x86_64.rpm \
+#    && wget https://github.com/abs-tudelft/fletcher/releases/download/0.0.20/fletcher-0.0.20-1.el7.x86_64.rpm \
 #    && rpm -i fletcher-0.0.19-1.el7.x86_64.rpm \
 #    && rm fletcher-0.0.19-1.el7.x86_64.rpm
 
 # Install Fletcher and fletchgen from binary release (wheels)
 #RUN cd ${WORKSPACE} \
-#    && wget https://github.com/abs-tudelft/fletcher/releases/download/0.0.19/pyfletchgen-0.0.19-cp36-cp36m-manylinux2014_x86_64.whl \
-#    && pip install pyfletchgen-0.0.19-cp36-cp36m-manylinux2014_x86_64.whl --prefix /usr/local
+#    && wget https://github.com/abs-tudelft/fletcher/releases/download/0.0.20/pyfletchgen-0.0.20-cp36-cp36m-manylinux2014_x86_64.whl \
+#    && pip install pyfletchgen-0.0.20-cp36-cp36m-manylinux2014_x86_64.whl --prefix /usr/local
 
-#unfortunately we need to use a modified vhdmmio to fix errors on centos 7. We need centos 7 (and not 8) because it is officially supported by Vivado 2019.2.
+#unfortunately we need to use a modified vhdmmio to fix errors on centos 7. We need centos 7 (and not 8) because it is officially supported by Vivado 2019.1.
 # Install vhdmmio from source
 if [ -d ${WORKSPACE}/vhdmmio ]; then
   echo "Custom vhdmmio seems to be installed already, skipping..."
