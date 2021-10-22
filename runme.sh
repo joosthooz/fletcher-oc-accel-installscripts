@@ -110,12 +110,15 @@ else
   fi
 fi
 
-echo "Installation completed. To run a Fletcher OpenCAPI example application, press enter. Otherwise, exit with ctrl-c."
-read
-
 # Install config files for the Fletcher-oc-accel examples into oc-accel
 cp ${scriptdir}/files/customaction.defconfig ${WORKSPACE}/OpenCAPI/oc-accel/defconfig
 cp ${scriptdir}/files/sum_snap_env.sh ${WORKSPACE}/OpenCAPI/oc-accel/snap_env.sh
+
+# Update action_root according to the location of our workspace, because ocaccel_workflow.py cannot handle the relative path (although it does for ocse)
+sed -i "s|export ACTION_ROOT=.*|export ACTION_ROOT=${WORKSPACE}/OpenCAPI/fletcher-oc-accel/examples/sum|" ${WORKSPACE}/OpenCAPI/oc-accel/snap_env.sh
+
+echo "Installation completed. To run a Fletcher OpenCAPI example application, press enter. Otherwise, exit with ctrl-c."
+read
 
 cd ${WORKSPACE}/OpenCAPI/oc-accel \
 && source /opt/Xilinx/Vivado/${VERSION}/settings64.sh \
