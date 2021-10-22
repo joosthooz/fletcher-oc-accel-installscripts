@@ -64,7 +64,7 @@ else
 fi
 
 # Install Fletcher and fletchgen from source
-if [ -d ${WORKSPACE}/fletcher ]; then
+if command -v fletchgen; then
   echo "Fletcher seems to be installed already, skipping..."
 else
   cd ${WORKSPACE} && git clone https://github.com/abs-tudelft/fletcher \
