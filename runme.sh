@@ -19,7 +19,7 @@ else
   echo "If you want, you can use the address of your university and select \"student\" as your profession."
   echo "Save the file to the default Downloads directory and make sure it keeps its original name (${VIVADO_INSTALLFILE})"
 
-  firefox https://www.xilinx.com/member/forms/download/xef-vivado.html?filename=${VIVADO_INSTALLERNAME} &
+  firefox https://www.xilinx.com/member/forms/download/xef-vivado.html?filename=${VIVADO_INSTALLERNAME} 2>/dev/null &
   echo "press enter to continue..."
   read
   if [ ! -f ${VIVADO_INSTALLFILE} ]; then
