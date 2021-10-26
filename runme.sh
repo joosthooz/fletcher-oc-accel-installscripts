@@ -34,6 +34,7 @@ else
     exit -1
   fi
 
+  echo "source /opt/Xilinx/Vivado/${VERSION}/settings64.sh" >> ~/.bashrc
   echo "Vivado Installation finished. Continuing installing oc-accel and Fletcher..."
 fi
 
