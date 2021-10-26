@@ -53,7 +53,7 @@ fi
 if [ -d ${WORKSPACE}/vhdmmio ]; then
   echo "Custom vhdmmio seems to be installed already, skipping..."
 else
-  mkdir ${WORKSPACE}/vhdmmio && cd ${WORKSPACE}/vhdmmio \
+  mkdir -p ${WORKSPACE}/vhdmmio && cd ${WORKSPACE}/vhdmmio \
   && git clone https://github.com/joosthooz/vhdmmio \
   && cd vhdmmio && git checkout force_utf8 \
   && pip install -e ./
@@ -67,9 +67,9 @@ fi
 if command -v fletchgen; then
   echo "Fletcher seems to be installed already, skipping..."
 else
-  cd ${WORKSPACE} && git clone https://github.com/abs-tudelft/fletcher \
-  && cd fletcher \
-  && mkdir ${WORKSPACE}/fletcher/build \
+  cd ${WORKSPACE} && git clone https://github.com/abs-tudelft/fletcher
+  cd fletcher && git pull && git submodule init && git submodule update \
+  && mkdir -p ${WORKSPACE}/fletcher/build \
   && cd ${WORKSPACE}/fletcher/build \
   && scl enable devtoolset-9 'bash -c "cmake -DFLETCHER_BUILD_FLETCHGEN=On .."' \
   && scl enable devtoolset-9 'bash -c "make -j4"' \
@@ -85,11 +85,14 @@ if [ -d ${WORKSPACE}/OpenCAPI/oc-accel ] && [ -d ${WORKSPACE}/OpenCAPI/ocse ]; t
   echo "oc-accel and ocse seem to be installed already, skipping..."
 else
   mkdir -p ${WORKSPACE}/OpenCAPI/ && cd ${WORKSPACE}/OpenCAPI \
-  && git clone https://github.com/OpenCAPI/oc-accel \
-  && pushd oc-accel && git submodule init && git submodule update && popd \
   && git clone https://github.com/OpenCAPI/ocse \
   && source /opt/Xilinx/Vivado/${VERSION}/settings64.sh \
-  && cd ocse && make
+  && pushd ocse && make && popd \
+  && git clone https://github.com/OpenCAPI/oc-accel \
+  && pushd oc-accel && git submodule init && git submodule update \
+  && cp ${scriptdir}/files/customaction.defconfig ${WORKSPACE}/OpenCAPI/oc-accel/defconfig \
+  && cp ${scriptdir}/files/sum_snap_env.sh ${WORKSPACE}/OpenCAPI/oc-accel/snap_env.sh \
+  && make software && popd
   if [ $? != 0 ]; then
     echo "Something went wrong during oc-accel and ocse installation, exiting"
   exit -1
@@ -97,22 +100,25 @@ else
 fi
 
 # Install fletcher for the oc-accel platform
-if [ -d ${WORKSPACE}/OpenCAPI/fletcher-oc-accel ]; then
+#if [ -d ${WORKSPACE}/OpenCAPI/fletcher-oc-accel ]; then
+if ldconfig -p | grep fletcher_oc-accel; then
   echo "Fletcher-oc-accel seems to be installed already, skipping..."
 else
-  cd ${WORKSPACE}/OpenCAPI \
-  && git clone https://github.com/abs-tudelft/fletcher-oc-accel \
-  && pushd fletcher-oc-accel && git checkout realign && git submodule init && git submodule update && popd \
-  && pushd fletcher-oc-accel/fletcher && git submodule init && git submodule update && popd
+  cd ${WORKSPACE}/OpenCAPI
+  git clone https://github.com/abs-tudelft/fletcher-oc-accel
+  pushd fletcher-oc-accel && git checkout realign && git pull && git submodule init && git submodule update && popd \
+  && pushd fletcher-oc-accel/fletcher && git submodule init && git submodule update && popd \
+  && mkdir -p ${WORKSPACE}/OpenCAPI/fletcher-oc-accel/runtime/build \
+  && cd       ${WORKSPACE}/OpenCAPI/fletcher-oc-accel/runtime/build \
+  && scl enable devtoolset-9 "SNAP_ROOT=${WORKSPACE}/OpenCAPI/oc-accel bash -c \"cmake ..\"" \
+  && scl enable devtoolset-9 'bash -c "make -j4"' \
+  && sudo scl enable devtoolset-9 'bash -c "make install"' \
+  && sudo ldconfig
   if [ $? != 0 ]; then
     echo "Something went wrong during Fletcher-oc-accel installation, exiting"
   exit -1
   fi
 fi
-
-# Install config files for the Fletcher-oc-accel examples into oc-accel
-cp ${scriptdir}/files/customaction.defconfig ${WORKSPACE}/OpenCAPI/oc-accel/defconfig
-cp ${scriptdir}/files/sum_snap_env.sh ${WORKSPACE}/OpenCAPI/oc-accel/snap_env.sh
 
 # Update action_root according to the location of our workspace, because ocaccel_workflow.py cannot handle the relative path (although it does for ocse)
 sed -i "s|export ACTION_ROOT=.*|export ACTION_ROOT=${WORKSPACE}/OpenCAPI/fletcher-oc-accel/examples/sum|" ${WORKSPACE}/OpenCAPI/oc-accel/snap_env.sh
