@@ -35,6 +35,11 @@ else
   fi
 
   echo "source /opt/Xilinx/Vivado/${VERSION}/settings64.sh" >> ~/.bashrc
+  # .bashrc is not sourced when starting an application by double-clicking it. We need a wrapper script and a modified desktop entry for that:
+  if command -v jupyter-notebook; then
+    cp ${scriptdir}/files/jupyter-notebook-with-env ~/.local/bin && chmod +x ~/.local/bin/jupyter-notebook-with-env
+    cp ${scriptdir}/files/jupyter-notebook.desktop ~/.local/share/applications/
+  fi
   echo "Vivado Installation finished. Continuing installing oc-accel and Fletcher..."
 fi
 
